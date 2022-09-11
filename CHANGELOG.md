@@ -3,7 +3,9 @@ initial fork from https://github.com/altangent/ccxws
 
 ## "0.48.0"
 
-### `BasicClient` change
+### What's Changed 
+
+`BasicClient` change
 
 - `candlePeriod` can now be passed in as a property of `Market`. The solution can be considered a workaround to the existing limitation of the library.  https://github.com/altangent/ccxws/issues/75 , https://github.com/altangent/ccxws/discussions/263 
 
@@ -38,7 +40,8 @@ market = {
 binance.subscribeCandles(market);
 #later subscribe to as many as allowed by the exchange! without the need to create a new client for every period
 ```
+### Limitations
 
-
+This property should ONLY be set in the market object used to for `subscribeCandles`. If you using multiple types of subscriptions, that is, `subscribeTrades`,etc. you need to delete this property before subsribing!!This is because the existence of the property will modify the Map identifer used to map the market to a market id and will possibly not work (untested) with other subscriptions. No time for me to test it across all other types of APIs.
 
 
