@@ -59,7 +59,7 @@ typings/
 
 test.ts
 test*.ts
-
+test*.js
 .vscode
 **/.DS_Store
 

@@ -1,6 +1,6 @@
 {
   "name": "ccxws",
-  "version": "0.47.0",
+  "version": "0.48.0",
   "description": "Websocket client for 37 cryptocurrency exchanges",
   "keywords": [
     "bitmex",
@@ -17,6 +17,7 @@
   "scripts": {
     "prepublish": "npm run build",
     "build": "tsc",
+    "debug": "node test.js",
     "format:fix": "prettier --write  \"src/**\" \"__tests__/**\"",
     "format": "prettier --check \"src/**\" \"__tests__/**\"",
     "lint": "eslint src __tests__",

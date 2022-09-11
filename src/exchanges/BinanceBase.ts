@@ -55,6 +55,7 @@ export type BinanceClientOptions = {
     l2snapshotSpeed?: string;
     testNet?: boolean;
     batchTickers?: boolean;
+    useMarketCandlePeriod?: boolean
 };
 
 export class BinanceBase extends BasicClient {
@@ -72,7 +73,7 @@ export class BinanceBase extends BasicClient {
     protected _batchUnsub: CancelableFn;
     protected _sendMessage: CancelableFn;
     protected _requestLevel2Snapshot: CancelableFn;
-
+    protected _usemarketCandlePeriod: boolean;
     constructor({
         name,
         wssPath,
@@ -86,6 +87,7 @@ export class BinanceBase extends BasicClient {
         l2updateSpeed = "",
         l2snapshotSpeed = "",
         batchTickers = true,
+        useMarketCandlePeriod = false
     }: BinanceClientOptions = {}) {
         super(wssPath, name, undefined, watcherMs);
 
@@ -105,6 +107,7 @@ export class BinanceBase extends BasicClient {
         this._messageId = 0;
         this._tickersActive = false;
         this.candlePeriod = CandlePeriod._1m;
+        this._usemarketCandlePeriod = useMarketCandlePeriod;
 
         this._batchSub = batch(this.__batchSub.bind(this), socketBatchSize);
         this._batchUnsub = batch(this.__batchUnsub.bind(this), socketBatchSize);
@@ -207,13 +210,29 @@ export class BinanceBase extends BasicClient {
         this._batchUnsub(stream);
     }
 
-    protected _sendSubCandles(remote_id: string) {
-        const stream = remote_id.toLowerCase() + "@kline_" + candlePeriod(this.candlePeriod);
+    protected _sendSubCandles(remote_id: string, market: Market) {
+        let stream;
+        if (this._usemarketCandlePeriod && market.candlePeriod ) {
+            const candlePeriodIdx = remote_id.lastIndexOf(market.candlePeriod)
+            stream = remote_id.substring(0,candlePeriodIdx).toLowerCase() + "@kline_" +  candlePeriod(market.candlePeriod)
+        } else {
+            this._usemarketCandlePeriod = false
+            stream = remote_id.toLowerCase() + "@kline_" + candlePeriod(this.candlePeriod);
+        }
+            
+
         this._batchSub(stream);
     }
 
-    protected _sendUnsubCandles(remote_id: string) {
-        const stream = remote_id.toLowerCase() + "@kline_" + candlePeriod(this.candlePeriod);
+    protected _sendUnsubCandles(remote_id: string, market: Market) {
+        let stream;
+        if (this._usemarketCandlePeriod && market.candlePeriod ) {
+            const candlePeriodIdx = remote_id.lastIndexOf(market.candlePeriod)
+            stream = remote_id.substring(0,candlePeriodIdx).toLowerCase() + "@kline_" +  candlePeriod(market.candlePeriod)
+        } else {
+            this._usemarketCandlePeriod = false
+            stream = remote_id.toLowerCase() + "@kline_" + candlePeriod(this.candlePeriod);
+        }
         this._batchUnsub(stream);
     }
 
@@ -320,7 +339,11 @@ export class BinanceBase extends BasicClient {
 
         // candle
         if (msg.data.e === "kline") {
-            const remote_id = msg.data.s;
+            let remote_id;
+            if (this._usemarketCandlePeriod)
+                remote_id = msg.data.s + "_" + msg.data.k.i;
+            else 
+                remote_id = msg.data.s;
             const market = this._candleSubs.get(remote_id);
             if (!market) return;
 

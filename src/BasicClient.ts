@@ -190,7 +190,9 @@ export abstract class BasicClient extends EventEmitter implements IClient {
      */
     protected _subscribe(market: Market, map: MarketMap, sendFn: SendFn) {
         this._connect();
-        const remote_id = market.id;
+        let remote_id = market.id;
+        if (market.candlePeriod)
+            remote_id = remote_id + market.candlePeriod;
         if (!map.has(remote_id)) {
             map.set(remote_id, market);
 
