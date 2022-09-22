@@ -4,4 +4,5 @@ export type ClientOptions = {
     throttleMs?: number;
     l2UpdateDepth?: number;
     throttleL2Snapshot?: number;
+    useMarketCandlePeriod?: boolean;
 };

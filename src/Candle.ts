@@ -6,5 +6,8 @@ export class Candle {
         readonly low: string,
         readonly close: string,
         readonly volume: string,
+        readonly count?: number,
+        readonly closed?: boolean,
+        readonly period?: string
     ) {}
 }
