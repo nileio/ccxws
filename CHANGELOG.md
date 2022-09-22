@@ -42,6 +42,17 @@ binance.subscribeCandles(market);
 ```
 ### Limitations
 
-This property should ONLY be set in the market object used to for `subscribeCandles`. If you using multiple types of subscriptions, that is, `subscribeTrades`,etc. you need to delete this property before subsribing!!This is because the existence of the property will modify the Map identifer used to map the market to a market id and will possibly not work (untested) with other subscriptions. No time for me to test it across all other types of APIs.
+This property should ONLY be set in the market object used to for `subscribeCandles`. If you using multiple types of subscriptions, that is, `subscribeTrades`,etc. you need to delete this property before subscribing!!This is because the existence of the property will modify the Map identifer used to map the market to a market id and will possibly not work (untested) with other subscriptions. No time for me to test it across all other types of APIs.
 
 
+## "0.49.0"
+
+### Add optinal properties to Candle
+- the following props added to Candle class
+```
+count?: number, -- the number of trades of this candle
+closed?: boolean, -- whether the candle is closed or not
+period?: string -- the candle period
+```
+
+- changed `BinanceBase` to make use of the new candle props
