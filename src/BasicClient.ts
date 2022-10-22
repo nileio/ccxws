@@ -213,7 +213,9 @@ export abstract class BasicClient extends EventEmitter implements IClient {
      * send operation is performed
      */
     protected _unsubscribe(market: Market, map: MarketMap, sendFn: SendFn) {
-        const remote_id = market.id;
+        let remote_id = market.id;
+        if (market.candlePeriod)
+            remote_id = remote_id + market.candlePeriod;
         if (map.has(remote_id)) {
             map.delete(remote_id);
 
