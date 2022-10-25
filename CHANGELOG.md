@@ -54,9 +54,9 @@ This property should ONLY be set in the market object used to for `subscribeCand
 - the following props added to Candle class
 
 ```
-count?: number, -- the number of trades of this candle
-closed?: boolean, -- whether the candle is closed or not
-period?: string -- the candle period
+count?: number, -- optional the number of trades of this candle. Some exchanges such as Binance sends the count of trades of this candle in the payload.
+closed?: boolean, -- optional whether the candle is closed or not. Some exchanges such as Binance includes a bit indicating whether the candle is closed in the payload.
+period?: string -- optional the candle period . It is optional to support backward compatibility for those clients that did not yet make use of `candlePeriod` property.
 ```
 
 - changed `BinanceBase` to make use of the new candle props
@@ -64,3 +64,9 @@ period?: string -- the candle period
 ## "0.50.0" FIX
 
 fix `unsubscribe` by adding the new property `candlePeriod` to \_unsubscribe in BasicClient
+
+## "0.51.0" Enhancements
+
+- `open` event is deprecated. remove it from `SmartWss`
+
+- added `1s` to list of supported candle periods. `Binance` as an example now supports "1s" timeframes. Note: it is up to the client to firstly check the allowed timeframes from the exchange (i.e. using ccxt).

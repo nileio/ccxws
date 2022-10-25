@@ -78,7 +78,7 @@ export class SmartWss extends EventEmitter {
             });
             this._wss.on("open", () => {
                 this._connected = true;
-                this.emit("open"); // deprecated
+                // this.emit("open"); // deprecated
                 this.emit("connected");
                 resolve();
             });

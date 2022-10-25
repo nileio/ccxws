@@ -1,4 +1,5 @@
 export enum CandlePeriod {
+    _1s = "_1s",
     _1m = "_1m",
     _2m = "_2m",
     _3m = "_3m",
