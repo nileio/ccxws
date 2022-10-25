@@ -69,4 +69,6 @@ fix `unsubscribe` by adding the new property `candlePeriod` to \_unsubscribe in 
 
 - `open` event is deprecated. remove it from `SmartWss`
 
+## "0.52.0" Enhancements
+
 - added `1s` to list of supported candle periods. `Binance` as an example now supports "1s" timeframes. Note: it is up to the client to firstly check the allowed timeframes from the exchange (i.e. using ccxt).
